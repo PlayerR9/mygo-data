@@ -180,3 +180,27 @@ func (l *LinkedQueue[T]) Reset() error {
 
 	return nil
 }
+
+// Add implements common.Collection.
+func (l *LinkedQueue[T]) Add(elem T) error {
+	if l == nil {
+		return common.ErrNilReceiver
+	}
+
+	l.tail_mu.Lock()
+	defer l.tail_mu.Unlock()
+
+	node := internal.NewNode(elem)
+
+	if l.tail == nil {
+		l.head_mu.Lock()
+		l.head = node
+		l.head_mu.Unlock()
+	} else {
+		_ = l.tail.SetNext(node)
+	}
+
+	l.tail = node
+
+	return nil
+}

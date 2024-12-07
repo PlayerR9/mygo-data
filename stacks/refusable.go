@@ -228,3 +228,16 @@ func (r *RefusableStack[T]) Refuse() error {
 
 	return nil
 }
+
+// Add implements common.Collection.
+func (r *RefusableStack[T]) Add(elem T) error {
+	if r == nil {
+		return common.ErrNilReceiver
+	}
+
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	err := r.stack.Add(elem)
+	return err
+}

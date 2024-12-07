@@ -115,6 +115,24 @@ func (s *SeenSet[E]) Size() uint {
 	return uint(len(s.seen))
 }
 
+// Add implements common.Collection.
+func (s *SeenSet[E]) Add(elem E) error {
+	if s == nil {
+		return nil
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if s.seen == nil {
+		s.seen = make(map[E]struct{})
+	}
+
+	s.seen[elem] = struct{}{}
+
+	return nil
+}
+
 // String implements fmt.Stringer.
 func (s *SeenSet[E]) String() string {
 	if s == nil {

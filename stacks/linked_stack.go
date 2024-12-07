@@ -149,3 +149,20 @@ func (l *LinkedStack[T]) Size() uint {
 
 	return size
 }
+
+// Add implements common.Collection.
+func (l *LinkedStack[T]) Add(elem T) error {
+	if l == nil {
+		return common.ErrNilReceiver
+	}
+
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	node := internal.NewNode(elem)
+	_ = node.SetPrev(l.head)
+
+	l.head = node
+
+	return nil
+}

@@ -140,6 +140,29 @@ func (c *CapacityQueue[T]) Size() uint {
 	return c.size
 }
 
+// Add implements common.Collection.
+func (c *CapacityQueue[T]) Add(elem T) error {
+	if c == nil {
+		return common.ErrNilReceiver
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.size >= c.capacity {
+		return common.ErrFullCollection
+	}
+
+	err := c.queue.Add(elem)
+	if err != nil {
+		return err
+	}
+
+	c.size++
+
+	return nil
+}
+
 // WithCapacity returns a new queue with the specified capacity.
 //
 // If queue is nil, a new ArrayQueue is created.

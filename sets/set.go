@@ -33,6 +33,39 @@ type BasicSet[E any] interface {
 	Insert(e E) error
 }
 
+// Insert adds multiple elements to the given BasicSet.
+//
+// Parameters:
+//   - s: The BasicSet to which elements will be added.
+//   - elems: The elements to be inserted into the set.
+//
+// Returns:
+//   - uint: The number of elements successfully inserted into the set.
+//   - error: An error if insertion fails at any point.
+//
+// Errors:
+//   - common.ErrBadParam: If the BasicSet is nil.
+//   - any other error: Implementation-specific.
+func Insert[E any](s BasicSet[E], elems ...E) (uint, error) {
+	if s == nil {
+		return 0, common.NewErrNilParam("s")
+	}
+
+	lenElems := uint(len(elems))
+	if lenElems == 0 {
+		return 0, nil
+	}
+
+	for i, elem := range elems {
+		err := s.Insert(elem)
+		if err != nil {
+			return uint(i), err
+		}
+	}
+
+	return lenElems, nil
+}
+
 // Set is a set of elements.
 type Set[E any] interface {
 	BasicSet[E]

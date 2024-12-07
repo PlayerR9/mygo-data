@@ -140,6 +140,29 @@ func (c *CapacityStack[T]) Size() uint {
 	return c.size
 }
 
+// Add implements common.Collection.
+func (c *CapacityStack[T]) Add(elem T) error {
+	if c == nil {
+		return common.ErrNilReceiver
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.size >= c.capacity {
+		return common.ErrFullCollection
+	}
+
+	err := c.stack.Add(elem)
+	if err != nil {
+		return err
+	}
+
+	c.size++
+
+	return nil
+}
+
 // WithCapacity returns a new stack with the specified capacity.
 //
 // If stack is nil, a new ArrayStack is created.

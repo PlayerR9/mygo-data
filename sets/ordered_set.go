@@ -111,6 +111,25 @@ func (s *OrderedSet[E]) IsEmpty() bool {
 	return len(s.elems) == 0
 }
 
+// Add implements common.Collection.
+func (s *OrderedSet[E]) Add(elem E) error {
+	if s == nil {
+		return nil
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	pos, ok := slices.BinarySearch(s.elems, elem)
+	if ok {
+		return nil
+	}
+
+	s.elems = slices.Insert(s.elems, pos, elem)
+
+	return nil
+}
+
 // String implements fmt.Stringer.
 func (s *OrderedSet[E]) String() string {
 	if s == nil {

@@ -124,3 +124,17 @@ func (a *ArrayStack[T]) Size() uint {
 
 	return uint(len(a.elems))
 }
+
+// Add implements common.Collection.
+func (a *ArrayStack[T]) Add(elem T) error {
+	if a == nil {
+		return common.ErrNilReceiver
+	}
+
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	a.elems = append(a.elems, elem)
+
+	return nil
+}

@@ -125,3 +125,17 @@ func (a *ArrayQueue[T]) Reset() error {
 
 	return nil
 }
+
+// Add implements common.Collection.
+func (a *ArrayQueue[T]) Add(elem T) error {
+	if a == nil {
+		return common.ErrNilReceiver
+	}
+
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	a.queue = append(a.queue, elem)
+
+	return nil
+}
