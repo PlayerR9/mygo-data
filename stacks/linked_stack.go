@@ -46,7 +46,7 @@ func (l *LinkedStack[T]) Pop() (T, error) {
 	defer l.mu.Unlock()
 
 	if l.head == nil {
-		return *new(T), ErrEmptyStack
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	top := l.head
@@ -81,7 +81,7 @@ func (l *LinkedStack[T]) Peek() (T, error) {
 	defer l.mu.RUnlock()
 
 	if l.head == nil {
-		return *new(T), ErrEmptyStack
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	v, _ := l.head.GetValue()

@@ -43,7 +43,7 @@ func (a *ArrayQueue[T]) Dequeue() (T, error) {
 	defer a.mu.Unlock()
 
 	if len(a.queue) == 0 {
-		return *new(T), ErrEmptyQueue
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	value := a.queue[0]
@@ -74,7 +74,7 @@ func (a *ArrayQueue[T]) Front() (T, error) {
 	defer a.mu.RUnlock()
 
 	if len(a.queue) == 0 {
-		return *new(T), ErrEmptyQueue
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	return a.queue[0], nil

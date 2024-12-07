@@ -31,7 +31,7 @@ func (c *CapacityQueue[T]) Enqueue(elem T) error {
 	defer c.mu.Unlock()
 
 	if c.size >= c.capacity {
-		return ErrFullQueue
+		return common.ErrFullCollection
 	}
 
 	err := c.queue.Enqueue(elem)
@@ -54,7 +54,7 @@ func (c *CapacityQueue[T]) Dequeue() (T, error) {
 	defer c.mu.Unlock()
 
 	if c.size == 0 {
-		return *new(T), ErrEmptyQueue
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	elem, err := c.queue.Dequeue()
@@ -89,7 +89,7 @@ func (c *CapacityQueue[T]) Front() (T, error) {
 	defer c.mu.RUnlock()
 
 	if c.size == 0 {
-		return *new(T), ErrEmptyQueue
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	top, err := c.queue.Front()

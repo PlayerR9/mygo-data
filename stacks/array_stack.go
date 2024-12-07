@@ -42,25 +42,13 @@ func (a *ArrayStack[T]) Pop() (T, error) {
 	defer a.mu.Unlock()
 
 	if len(a.elems) == 0 {
-		return *new(T), ErrEmptyStack
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	top := a.elems[len(a.elems)-1]
 	a.elems = a.elems[:len(a.elems)-1]
 
 	return top, nil
-}
-
-// IsEmpty implements Stack.
-func (a *ArrayStack[T]) IsEmpty() bool {
-	if a == nil {
-		return true
-	}
-
-	a.mu.RLock()
-	defer a.mu.RUnlock()
-
-	return len(a.elems) == 0
 }
 
 // Peek implements Stack.
@@ -73,10 +61,22 @@ func (a *ArrayStack[T]) Peek() (T, error) {
 	defer a.mu.RUnlock()
 
 	if len(a.elems) == 0 {
-		return *new(T), ErrEmptyStack
+		return *new(T), common.ErrEmptyCollection
 	}
 
 	return a.elems[len(a.elems)-1], nil
+}
+
+// IsEmpty implements Stack.
+func (a *ArrayStack[T]) IsEmpty() bool {
+	if a == nil {
+		return true
+	}
+
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+
+	return len(a.elems) == 0
 }
 
 // Slice implements Stack.
