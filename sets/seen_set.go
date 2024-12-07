@@ -2,7 +2,6 @@ package sets
 
 import (
 	"fmt"
-	"iter"
 	"strings"
 	"sync"
 )
@@ -93,29 +92,22 @@ func (s *SeenSet[E]) Reset() {
 	s.seen = nil
 }
 
-// Elem returns an iterator function that yields all the elements in the set.
-//
-// The iterator function takes a yield function as an argument and calls it for
-// each element in the set. If the yield function returns false, the iteration
-// stops early.
-//
-// Returns:
-//   - iter.Seq[E]: An iterator function for the elements in the set.
-func (s *SeenSet[E]) Elem() iter.Seq[E] {
+// Slice implements Set.
+func (s *SeenSet[E]) Slice() []E {
 	if s == nil {
-		return func(yield func(E) bool) {}
+		return nil
 	}
 
-	return func(yield func(E) bool) {
-		s.mu.RLock()
-		defer s.mu.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 
-		for e := range s.seen {
-			if !yield(e) {
-				break
-			}
-		}
+	slice := make([]E, 0, len(s.seen))
+
+	for e := range s.seen {
+		slice = append(slice, e)
 	}
+
+	return slice
 }
 
 // IsEmpty implements Set.

@@ -1,6 +1,9 @@
 package sets
 
-import "fmt"
+import (
+	"fmt"
+	"iter"
+)
 
 // Set is a set of elements.
 type Set[E any] interface {
@@ -39,6 +42,16 @@ type Set[E any] interface {
 	// Returns:
 	//   - uint: The number of elements in the set.
 	Size() uint
+
+	// Elem returns an iterator function that yields all the elements in the set.
+	//
+	// The iterator function takes a yield function as an argument and calls it for
+	// each element in the set. If the yield function returns false, the iteration
+	// stops early.
+	//
+	// Returns:
+	//   - iter.Seq[E]: An iterator function for the elements in the set.
+	Elem() iter.Seq[E]
 
 	fmt.Stringer
 }
