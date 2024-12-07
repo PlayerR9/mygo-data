@@ -19,7 +19,7 @@ type ArrayQueue[T any] struct {
 	mu sync.RWMutex
 }
 
-// Enqueue implements Queue.
+// Enqueue implements BasicQueue.
 func (a *ArrayQueue[T]) Enqueue(value T) error {
 	if a == nil {
 		return common.ErrNilReceiver
@@ -33,7 +33,7 @@ func (a *ArrayQueue[T]) Enqueue(value T) error {
 	return nil
 }
 
-// Dequeue implements Queue.
+// Dequeue implements BasicQueue.
 func (a *ArrayQueue[T]) Dequeue() (T, error) {
 	if a == nil {
 		return *new(T), common.ErrNilReceiver
@@ -52,19 +52,7 @@ func (a *ArrayQueue[T]) Dequeue() (T, error) {
 	return value, nil
 }
 
-// IsEmpty implements Queue.
-func (a *ArrayQueue[T]) IsEmpty() bool {
-	if a == nil {
-		return true
-	}
-
-	a.mu.RLock()
-	defer a.mu.RUnlock()
-
-	return len(a.queue) == 0
-}
-
-// Front implements Queue.
+// Front implements BasicQueue.
 func (a *ArrayQueue[T]) Front() (T, error) {
 	if a == nil {
 		return *new(T), common.ErrNilReceiver
@@ -80,7 +68,19 @@ func (a *ArrayQueue[T]) Front() (T, error) {
 	return a.queue[0], nil
 }
 
-// Slice implements Queue.
+// IsEmpty implements common.Collection.
+func (a *ArrayQueue[T]) IsEmpty() bool {
+	if a == nil {
+		return true
+	}
+
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+
+	return len(a.queue) == 0
+}
+
+// Slice implements common.Collection.
 func (a *ArrayQueue[T]) Slice() []T {
 	if a == nil {
 		return nil
@@ -95,7 +95,7 @@ func (a *ArrayQueue[T]) Slice() []T {
 	return elems
 }
 
-// Size implements Queue.
+// Size implements common.Collection.
 func (a *ArrayQueue[T]) Size() uint {
 	if a == nil {
 		return 0
@@ -107,7 +107,7 @@ func (a *ArrayQueue[T]) Size() uint {
 	return uint(len(a.queue))
 }
 
-// Reset implements Queue.
+// Reset implements common.Collection.
 func (a *ArrayQueue[T]) Reset() error {
 	if a == nil {
 		return common.ErrNilReceiver

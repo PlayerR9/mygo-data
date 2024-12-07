@@ -26,7 +26,7 @@ type LinkedQueue[T any] struct {
 	tail_mu sync.RWMutex
 }
 
-// Enqueue implements Queue.
+// Enqueue implements BasicQueue.
 func (l *LinkedQueue[T]) Enqueue(elem T) error {
 	if l == nil {
 		return common.ErrNilReceiver
@@ -50,7 +50,7 @@ func (l *LinkedQueue[T]) Enqueue(elem T) error {
 	return nil
 }
 
-// Dequeue implements Queue.
+// Dequeue implements BasicQueue.
 func (l *LinkedQueue[T]) Dequeue() (T, error) {
 	if l == nil {
 		return *new(T), common.ErrNilReceiver
@@ -77,19 +77,7 @@ func (l *LinkedQueue[T]) Dequeue() (T, error) {
 	return v, nil
 }
 
-// IsEmpty implements Queue.
-func (l *LinkedQueue[T]) IsEmpty() bool {
-	if l == nil {
-		return true
-	}
-
-	l.head_mu.RLock()
-	defer l.head_mu.RUnlock()
-
-	return l.head == nil
-}
-
-// Front implements Queue.
+// Front implements BasicQueue.
 func (l *LinkedQueue[T]) Front() (T, error) {
 	if l == nil {
 		return *new(T), common.ErrNilReceiver
@@ -105,7 +93,19 @@ func (l *LinkedQueue[T]) Front() (T, error) {
 	return l.head.GetValue()
 }
 
-// Slice implements Queue.
+// IsEmpty implements common.Collection.
+func (l *LinkedQueue[T]) IsEmpty() bool {
+	if l == nil {
+		return true
+	}
+
+	l.head_mu.RLock()
+	defer l.head_mu.RUnlock()
+
+	return l.head == nil
+}
+
+// Slice implements common.Collection.
 func (l *LinkedQueue[T]) Slice() []T {
 	if l == nil {
 		return nil
@@ -132,7 +132,7 @@ func (l *LinkedQueue[T]) Slice() []T {
 	return elems
 }
 
-// Size implements Queue.
+// Size implements common.Collection.
 func (l *LinkedQueue[T]) Size() uint {
 	if l == nil {
 		return 0
@@ -157,7 +157,7 @@ func (l *LinkedQueue[T]) Size() uint {
 	return size
 }
 
-// Reset implements Queue.
+// Reset implements common.Collection.
 func (l *LinkedQueue[T]) Reset() error {
 	if l == nil {
 		return common.ErrNilReceiver

@@ -2,8 +2,7 @@ package queues
 
 import "github.com/PlayerR9/mygo-data/common"
 
-// Queue is a generic interface for a queue.
-type Queue[T any] interface {
+type BasicQueue[E any] interface {
 	// Enqueue adds a value to the queue.
 	//
 	// Parameters:
@@ -16,19 +15,19 @@ type Queue[T any] interface {
 	//   - common.ErrNilReceiver: If the queue is nil.
 	//   - ErrFullQueue: If the queue is full.
 	//   - any other error: Implementation-specific.
-	Enqueue(elem T) error
+	Enqueue(elem E) error
 
 	// Dequeue removes and returns the first value from the queue.
 	//
 	// Returns:
-	//   - T: The value removed from the queue.
+	//   - E: The value removed from the queue.
 	//   - error: An error if the value could not be removed from the queue.
 	//
 	// Errors:
 	//   - common.ErrNilReceiver: If the queue is nil.
 	//   - ErrEmptyQueue: If the queue is empty.
 	//   - any other error: Implementation-specific.
-	Dequeue() (T, error)
+	Dequeue() (E, error)
 
 	// Front returns the first value in the queue without removing it.
 	//
@@ -40,7 +39,12 @@ type Queue[T any] interface {
 	//   - common.ErrNilReceiver: If the queue is nil.
 	//   - ErrEmptyQueue: If the queue is empty.
 	//   - any other error: Implementation-specific.
-	Front() (T, error)
+	Front() (E, error)
+}
+
+// Queue is a generic interface for a queue.
+type Queue[T any] interface {
+	BasicQueue[T]
 
 	common.Collection[T]
 }
@@ -59,7 +63,7 @@ type Queue[T any] interface {
 //   - common.ErrBadParam: If the queue is nil.
 //   - ErrFullQueue: If the queue is full.
 //   - any other error: Implementation-specific.
-func Enqueue[T any](queue Queue[T], elems ...T) (uint, error) {
+func Enqueue[T any](queue BasicQueue[T], elems ...T) (uint, error) {
 	if queue == nil {
 		return 0, common.NewErrNilParam("queue")
 	}

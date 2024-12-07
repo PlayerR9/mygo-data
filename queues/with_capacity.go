@@ -21,7 +21,7 @@ type CapacityQueue[T any] struct {
 	mu sync.RWMutex
 }
 
-// Enqueue implements Queue.
+// Enqueue implements BasicQueue.
 func (c *CapacityQueue[T]) Enqueue(elem T) error {
 	if c == nil {
 		return common.ErrNilReceiver
@@ -44,7 +44,7 @@ func (c *CapacityQueue[T]) Enqueue(elem T) error {
 	return nil
 }
 
-// Dequeue implements Queue.
+// Dequeue implements BasicQueue.
 func (c *CapacityQueue[T]) Dequeue() (T, error) {
 	if c == nil {
 		return *new(T), common.ErrNilReceiver
@@ -67,19 +67,7 @@ func (c *CapacityQueue[T]) Dequeue() (T, error) {
 	return elem, nil
 }
 
-// IsEmpty implements Queue.
-func (c *CapacityQueue[T]) IsEmpty() bool {
-	if c == nil {
-		return true
-	}
-
-	c.mu.RLock()
-	defer c.mu.RUnlock()
-
-	return c.size == 0
-}
-
-// Front implements Queue.
+// Front implements BasicQueue.
 func (c *CapacityQueue[T]) Front() (T, error) {
 	if c == nil {
 		return *new(T), common.ErrNilReceiver
@@ -96,7 +84,19 @@ func (c *CapacityQueue[T]) Front() (T, error) {
 	return top, err
 }
 
-// Slice implements Queue.
+// IsEmpty implements common.Collection.
+func (c *CapacityQueue[T]) IsEmpty() bool {
+	if c == nil {
+		return true
+	}
+
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
+	return c.size == 0
+}
+
+// Slice implements common.Collection.
 func (c *CapacityQueue[T]) Slice() []T {
 	if c == nil {
 		return nil
@@ -109,7 +109,7 @@ func (c *CapacityQueue[T]) Slice() []T {
 	return slice
 }
 
-// Reset implements Queue.
+// Reset implements common.Collection.
 func (c *CapacityQueue[T]) Reset() error {
 	if c == nil {
 		return common.ErrNilReceiver
@@ -128,7 +128,7 @@ func (c *CapacityQueue[T]) Reset() error {
 	return nil
 }
 
-// Size implements Queue.
+// Size implements common.Collection.
 func (c *CapacityQueue[T]) Size() uint {
 	if c == nil {
 		return 0
