@@ -45,7 +45,7 @@ func (s *OrderedSet[E]) String() string {
 	return builder.String()
 }
 
-// Has implements Set interface.
+// Has implements Set.
 func (s *OrderedSet[E]) Has(e E) bool {
 	if s == nil {
 		return false
@@ -58,7 +58,7 @@ func (s *OrderedSet[E]) Has(e E) bool {
 	return ok
 }
 
-// Insert implements Set interface.
+// Insert implements Set.
 //
 // No other error is returned.
 func (s *OrderedSet[E]) Insert(e E) error {
@@ -115,4 +115,28 @@ func (s *OrderedSet[E]) Elem() iter.Seq[E] {
 			}
 		}
 	}
+}
+
+// Size implements Set.
+func (s *OrderedSet[E]) Size() uint {
+	if s == nil {
+		return 0
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return uint(len(s.elems))
+}
+
+// IsEmpty implements Set.
+func (s *OrderedSet[E]) IsEmpty() bool {
+	if s == nil {
+		return true
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return len(s.elems) == 0
 }

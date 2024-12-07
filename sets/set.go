@@ -28,5 +28,17 @@ type Set[E any] interface {
 	//   - any other error: Implementation-specific.
 	Insert(e E) error
 
+	// IsEmpty checks if the set is empty.
+	//
+	// Returns:
+	//   - bool: True if the set is empty, false otherwise.
+	IsEmpty() bool
+
+	// Size returns the number of elements in the set.
+	//
+	// Returns:
+	//   - uint: The number of elements in the set.
+	Size() uint
+
 	fmt.Stringer
 }

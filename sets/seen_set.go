@@ -43,7 +43,7 @@ func (s *SeenSet[E]) String() string {
 	return builder.String()
 }
 
-// Has implements Set interface.
+// Has implements Set.
 func (s *SeenSet[E]) Has(e E) bool {
 	if s == nil {
 		return false
@@ -60,7 +60,7 @@ func (s *SeenSet[E]) Has(e E) bool {
 	return ok
 }
 
-// Insert implements Set interface.
+// Insert implements Set.
 //
 // No other error is returned.
 func (s *SeenSet[E]) Insert(e E) error {
@@ -116,4 +116,28 @@ func (s *SeenSet[E]) Elem() iter.Seq[E] {
 			}
 		}
 	}
+}
+
+// IsEmpty implements Set.
+func (s *SeenSet[E]) IsEmpty() bool {
+	if s == nil {
+		return true
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return len(s.seen) == 0
+}
+
+// Size implements Set.
+func (s *SeenSet[E]) Size() uint {
+	if s == nil {
+		return 0
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return uint(len(s.seen))
 }
