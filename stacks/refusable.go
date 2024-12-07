@@ -8,9 +8,6 @@ import (
 )
 
 // RefusableStack is a stack that can be refused. This is thread-safe.
-//
-// A RefusableStack can be created by using the `stack := new(RefusableStack[T])`
-// constructor.
 type RefusableStack[T any] struct {
 	// stack is the underlying stack.
 	stack Stack[T]

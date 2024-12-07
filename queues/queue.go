@@ -14,6 +14,8 @@ type Queue[T any] interface {
 	//
 	// Errors:
 	//   - common.ErrNilReceiver: If the queue is nil.
+	//   - ErrFullQueue: If the queue is full.
+	//   - any other error: Implementation-specific.
 	Enqueue(elem T) error
 
 	// Dequeue removes and returns the first value from the queue.
@@ -25,6 +27,7 @@ type Queue[T any] interface {
 	// Errors:
 	//   - common.ErrNilReceiver: If the queue is nil.
 	//   - ErrEmptyQueue: If the queue is empty.
+	//   - any other error: Implementation-specific.
 	Dequeue() (T, error)
 
 	// IsEmpty checks if the queue is empty.
@@ -42,6 +45,7 @@ type Queue[T any] interface {
 	// Errors:
 	//   - common.ErrNilReceiver: If the queue is nil.
 	//   - ErrEmptyQueue: If the queue is empty.
+	//   - any other error: Implementation-specific.
 	Front() (T, error)
 
 	// Slice returns a slice of the values in the queue.
@@ -69,20 +73,29 @@ type Queue[T any] interface {
 //   - elems: The values to enqueue.
 //
 // Returns:
+//   - uint: The number of values that were enqueued.
 //   - error: An error if the queue is nil or if a value could not be enqueued.
 //
 // Errors:
 //   - common.ErrBadParam: If the queue is nil.
-func Enqueue[T any](queue Queue[T], elems ...T) error {
+//   - ErrFullQueue: If the queue is full.
+//   - any other error: Implementation-specific.
+func Enqueue[T any](queue Queue[T], elems ...T) (uint, error) {
 	if queue == nil {
-		return common.NewErrNilParam("queue")
-	} else if len(elems) == 0 {
-		return nil
+		return 0, common.NewErrNilParam("queue")
 	}
 
-	for _, elem := range elems {
-		_ = queue.Enqueue(elem)
+	lenElems := uint(len(elems))
+	if lenElems == 0 {
+		return 0, nil
 	}
 
-	return nil
+	for i, elem := range elems {
+		err := queue.Enqueue(elem)
+		if err != nil {
+			return uint(i), err
+		}
+	}
+
+	return lenElems, nil
 }

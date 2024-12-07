@@ -6,11 +6,18 @@ import (
 	"github.com/PlayerR9/mygo-data/common"
 )
 
+// CapacityStack is a stack that has a fixed capacity.
 type CapacityStack[T any] struct {
-	stack    Stack[T]
-	size     uint
+	// stack is the underlying stack.
+	stack Stack[T]
+
+	// size is the number of elements in the stack.
+	size uint
+
+	// capacity is the maximum number of elements in the stack.
 	capacity uint
 
+	// mu is the mutex for the stack.
 	mu sync.RWMutex
 }
 
