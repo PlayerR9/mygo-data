@@ -1,6 +1,11 @@
 package collections
 
-import "github.com/PlayerR9/mygo-data/common"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/PlayerR9/mygo-data/common"
+)
 
 // Collection is an interface for a collection.
 type Collection[E any] interface {
@@ -87,4 +92,54 @@ func Add[E any](c Collection[E], elems ...E) (uint, error) {
 	}
 
 	return uint(lenElems), nil
+}
+
+// func IsEmpty(collection any) (bool, error) {
+// 	if collection == nil {
+// 		return false, common.NewErrNilParam("collection")
+// 	}
+
+// 	switch c := collection.(type) {
+// 	case interface{ IsEmpty() bool }:
+// 		ok := c.IsEmpty()
+// 		return ok, nil
+// 	case interface{ Size() uint }:
+// 		size := c.Size()
+// 		return size == 0, nil
+// 	default:
+// 		return false, fmt.Errorf("collection type %T does not implement IsEmpty() or Size()", collection)
+// 	}
+// }
+
+// String returns a string representation of the given collection.
+//
+// Parameters:
+//   - type_: The name of the type of elements in the collection.
+//   - collection: The collection for which to generate the string.
+//
+// Returns:
+//   - string: The string representation of the collection.
+//
+// Notes:
+//   - If the collection is empty, the string representation is the type name
+//     followed by "[]".
+//   - If the collection is not empty, the string representation is the type name
+//     followed by "[" and the elements of the collection (separated by ", ") and
+//     "]".
+func String[E any](type_ string, collection Collection[E]) string {
+	if collection == nil {
+		return "<nil>"
+	}
+
+	slice := collection.Slice()
+	if len(slice) == 0 {
+		return type_ + "[]"
+	}
+
+	elems := make([]string, 0, len(slice))
+	for _, e := range slice {
+		elems = append(elems, fmt.Sprint(e))
+	}
+
+	return type_ + "[" + strings.Join(elems, ", ") + "]"
 }
