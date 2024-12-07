@@ -14,6 +14,8 @@ type Stack[T any] interface {
 	//
 	// Errors:
 	//   - common.ErrNilReceiver: If the receiver is nil.
+	//   - ErrFullStack: If the stack is full.
+	//   - any other error: Implementation-specific.
 	Push(elem T) error
 
 	// Pop removes and returns the top element from the stack.
@@ -24,7 +26,8 @@ type Stack[T any] interface {
 	//
 	// Errors:
 	//   - common.ErrNilReceiver: If the receiver is nil.
-	//   - ErrStackEmpty: If the stack is empty.
+	//   - ErrEmptyStack: If the stack is empty.
+	//   - any other error: Implementation-specific.
 	Pop() (T, error)
 
 	// IsEmpty checks whether the stack is empty.
@@ -41,7 +44,8 @@ type Stack[T any] interface {
 	//
 	// Errors:
 	//   - common.ErrNilReceiver: If the receiver is nil.
-	//   - ErrStackEmpty: If the stack is empty.
+	//   - ErrEmptyStack: If the stack is empty.
+	//   - any other error: Implementation-specific.
 	Peek() (T, error)
 
 	// Slice returns the elements of the stack as a slice.
@@ -70,22 +74,31 @@ type Stack[T any] interface {
 //   - elems: The elements to push onto the stack.
 //
 // Returns:
+//   - uint: The number of elements pushed onto the stack.
 //   - error: An error if the stack operation fails.
 //
 // Errors:
 //   - common.ErrBadParam: If the stack is nil.
-func Push[T any](stack Stack[T], elems ...T) error {
+//   - ErrFullStack: If the stack is full.
+//   - any other error: Implementation-specific.
+func Push[T any](stack Stack[T], elems ...T) (uint, error) {
 	if stack == nil {
-		return common.NewErrNilParam("stack")
-	} else if len(elems) == 0 {
-		return nil
+		return 0, common.NewErrNilParam("stack")
+	}
+
+	lenElems := uint(len(elems))
+	if lenElems == 0 {
+		return 0, nil
 	}
 
 	elems = Reverse(elems)
 
-	for _, elem := range elems {
-		_ = stack.Push(elem)
+	for i, elem := range elems {
+		err := stack.Push(elem)
+		if err != nil {
+			return uint(i), err
+		}
 	}
 
-	return nil
+	return lenElems, nil
 }

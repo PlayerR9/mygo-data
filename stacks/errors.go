@@ -3,14 +3,22 @@ package stacks
 import "errors"
 
 var (
-	// ErrStackEmpty occurs when the stack is empty. This can be checked using
+	// ErrEmptyStack occurs when the stack is empty. This can be checked using
 	// the == operator.
 	//
 	// Format:
 	// 	"stack is empty"
-	ErrStackEmpty error
+	ErrEmptyStack error
+
+	// ErrFullStack occurs when the stack is full. This can be checked using
+	// the == operator.
+	//
+	// Format:
+	// 	"stack is full"
+	ErrFullStack error
 )
 
 func init() {
-	ErrStackEmpty = errors.New("stack is empty")
+	ErrEmptyStack = errors.New("stack is empty")
+	ErrFullStack = errors.New("stack is full")
 }

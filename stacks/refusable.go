@@ -31,9 +31,8 @@ func (r *RefusableStack[T]) Push(elem T) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	_ = r.stack.Push(elem)
-
-	return nil
+	err := r.stack.Push(elem)
+	return err
 }
 
 // Pop implements Stack.
@@ -64,7 +63,8 @@ func (r *RefusableStack[T]) IsEmpty() bool {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
-	return r.stack.IsEmpty()
+	ok := r.stack.IsEmpty()
+	return ok
 }
 
 // Peek implements Stack.
@@ -93,7 +93,8 @@ func (r *RefusableStack[T]) Slice() []T {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
-	return r.stack.Slice()
+	slice := r.stack.Slice()
+	return slice
 }
 
 // Reset implements Stack.
@@ -120,7 +121,8 @@ func (r *RefusableStack[T]) Size() uint {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
-	return r.stack.Size()
+	size := r.stack.Size()
+	return size
 }
 
 // RefusableOf creates a RefusableStack from the given Stack.
@@ -179,6 +181,10 @@ func (r *RefusableStack[T]) Accept() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
+	if len(r.popped) == 0 {
+		return nil
+	}
+
 	clear(r.popped)
 	r.popped = nil
 
@@ -192,8 +198,8 @@ func (r *RefusableStack[T]) Accept() error {
 //
 // Errors:
 //   - common.ErrNilReceiver: If the receiver is nil.
-//
-// This method is thread-safe.
+//   - ErrFullStack: If the stack is full.
+//   - any other error: Implementation-specific.
 func (r *RefusableStack[T]) Refuse() error {
 	if r == nil {
 		return common.ErrNilReceiver
@@ -202,10 +208,17 @@ func (r *RefusableStack[T]) Refuse() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
+	if len(r.popped) == 0 {
+		return nil
+	}
+
 	slices.Reverse(r.popped)
 
 	for _, elem := range r.popped {
-		_ = r.stack.Push(elem)
+		err := r.stack.Push(elem)
+		if err != nil {
+			return err
+		}
 	}
 
 	clear(r.popped)
