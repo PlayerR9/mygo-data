@@ -21,7 +21,97 @@ type OrderedSet[E cmp.Ordered] struct {
 	mu sync.RWMutex
 }
 
-// String implements Set.
+// Has implements BasicSet.
+func (s *OrderedSet[E]) Has(e E) bool {
+	if s == nil {
+		return false
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	_, ok := slices.BinarySearch(s.elems, e)
+	return ok
+}
+
+// Insert implements BasicSet.
+func (s *OrderedSet[E]) Insert(e E) error {
+	if s == nil {
+		return nil
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	pos, ok := slices.BinarySearch(s.elems, e)
+	if ok {
+		return nil
+	}
+
+	s.elems = slices.Insert(s.elems, pos, e)
+
+	return nil
+}
+
+// Reset implements common.Collection.
+func (s *OrderedSet[E]) Reset() error {
+	if s == nil {
+		return common.ErrNilReceiver
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if len(s.elems) == 0 {
+		return nil
+	}
+
+	clear(s.elems)
+	s.elems = nil
+
+	return nil
+}
+
+// Slice implements common.Collection.
+func (s *OrderedSet[E]) Slice() []E {
+	if s == nil {
+		return nil
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	slice := make([]E, len(s.elems))
+	copy(slice, s.elems)
+
+	return slice
+}
+
+// Size implements common.Collection.
+func (s *OrderedSet[E]) Size() uint {
+	if s == nil {
+		return 0
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return uint(len(s.elems))
+}
+
+// IsEmpty implements common.Collection.
+func (s *OrderedSet[E]) IsEmpty() bool {
+	if s == nil {
+		return true
+	}
+
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return len(s.elems) == 0
+}
+
+// String implements fmt.Stringer.
 func (s *OrderedSet[E]) String() string {
 	if s == nil {
 		return ""
@@ -44,96 +134,4 @@ func (s *OrderedSet[E]) String() string {
 	_, _ = builder.WriteRune(']')
 
 	return builder.String()
-}
-
-// Has implements Set.
-func (s *OrderedSet[E]) Has(e E) bool {
-	if s == nil {
-		return false
-	}
-
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	_, ok := slices.BinarySearch(s.elems, e)
-	return ok
-}
-
-// Insert implements Set.
-//
-// No other error is returned.
-func (s *OrderedSet[E]) Insert(e E) error {
-	if s == nil {
-		return nil
-	}
-
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	pos, ok := slices.BinarySearch(s.elems, e)
-	if ok {
-		return nil
-	}
-
-	s.elems = slices.Insert(s.elems, pos, e)
-
-	return nil
-}
-
-// Reset implements Set.
-func (s *OrderedSet[E]) Reset() error {
-	if s == nil {
-		return common.ErrNilReceiver
-	}
-
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	if len(s.elems) == 0 {
-		return nil
-	}
-
-	clear(s.elems)
-	s.elems = nil
-
-	return nil
-}
-
-// Slice implements Set.
-func (s *OrderedSet[E]) Slice() []E {
-	if s == nil {
-		return nil
-	}
-
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	slice := make([]E, len(s.elems))
-	copy(slice, s.elems)
-
-	return slice
-}
-
-// Size implements Set.
-func (s *OrderedSet[E]) Size() uint {
-	if s == nil {
-		return 0
-	}
-
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	return uint(len(s.elems))
-}
-
-// IsEmpty implements Set.
-func (s *OrderedSet[E]) IsEmpty() bool {
-	if s == nil {
-		return true
-	}
-
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	return len(s.elems) == 0
 }

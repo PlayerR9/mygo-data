@@ -6,8 +6,8 @@ import (
 	"github.com/PlayerR9/mygo-data/common"
 )
 
-// Set is a set of elements.
-type Set[E any] interface {
+// BasicSet is the interface for a basic set.
+type BasicSet[E any] interface {
 	// Has checks if the given element is in the set.
 	//
 	// Parameters:
@@ -31,6 +31,11 @@ type Set[E any] interface {
 	//   - common.ErrNilReceiver: If the receiver is nil.
 	//   - any other error: Implementation-specific.
 	Insert(e E) error
+}
+
+// Set is a set of elements.
+type Set[E any] interface {
+	BasicSet[E]
 
 	common.Collection[E]
 
