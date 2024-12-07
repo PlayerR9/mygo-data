@@ -9,8 +9,8 @@ import (
 // ArrayQueue is a generic implementation of a queue using an array. This is
 // thread-safe.
 //
-// An empty array queue can be created by using the `var queue ArrayQueue[T]`
-// syntax or the `queue := new(ArrayQueue[T])` constructor.
+// An empty array queue can be created by using the `queue := new(ArrayQueue[T])`
+// constructor.
 type ArrayQueue[T any] struct {
 	// queue is the array used to store the values.
 	queue []T

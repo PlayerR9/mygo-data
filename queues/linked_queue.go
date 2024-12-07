@@ -10,8 +10,8 @@ import (
 // LinkedQueue is a queue implemented using a linked list. This is
 // thread-safe.
 //
-// An empty LinkedQueue can be created by using the `var queue LinkedQueue[T]`
-// syntax or the `queue := new(LinkedQueue[T])` constructor.
+// An empty LinkedQueue can be created by using the `queue := new(LinkedQueue[T])`
+// constructor.
 type LinkedQueue[T any] struct {
 	// head is the first node in the queue.
 	head *internal.Node[T]
