@@ -30,12 +30,6 @@ type Stack[T any] interface {
 	//   - any other error: Implementation-specific.
 	Pop() (T, error)
 
-	// IsEmpty checks whether the stack is empty.
-	//
-	// Returns:
-	//   - bool: True if the stack is empty, false otherwise.
-	IsEmpty() bool
-
 	// Peek returns the top element from the stack without removing it.
 	//
 	// Returns:
@@ -48,22 +42,7 @@ type Stack[T any] interface {
 	//   - any other error: Implementation-specific.
 	Peek() (T, error)
 
-	// Slice returns the elements of the stack as a slice.
-	//
-	// Returns:
-	//   - []T: The elements of the stack as a slice.
-	//
-	// The returned slice has the property that, the last element of the
-	// slice is the bottom element of the stack.
-	Slice() []T
-
-	// Size returns the number of elements in the stack.
-	//
-	// Returns:
-	//   - uint: The number of elements in the stack.
-	Size() uint
-
-	common.Resetter
+	common.Collection[T]
 }
 
 // Push pushes multiple elements onto the stack.

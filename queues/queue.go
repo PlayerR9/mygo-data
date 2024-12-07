@@ -30,12 +30,6 @@ type Queue[T any] interface {
 	//   - any other error: Implementation-specific.
 	Dequeue() (T, error)
 
-	// IsEmpty checks if the queue is empty.
-	//
-	// Returns:
-	//   - bool: True if the queue is empty, false otherwise.
-	IsEmpty() bool
-
 	// Front returns the first value in the queue without removing it.
 	//
 	// Returns:
@@ -48,22 +42,7 @@ type Queue[T any] interface {
 	//   - any other error: Implementation-specific.
 	Front() (T, error)
 
-	// Slice returns a slice of the values in the queue.
-	//
-	// Returns:
-	//   - []T: A slice of the values in the queue.
-	//
-	// The returned slice has the property that, the first element of the
-	// slice is the first value in the queue.
-	Slice() []T
-
-	// Size returns the number of values in the queue.
-	//
-	// Returns:
-	//   - uint: The number of values in the queue.
-	Size() uint
-
-	common.Resetter
+	common.Collection[T]
 }
 
 // Enqueue enqueues multiple values to the given queue.
