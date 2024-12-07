@@ -69,3 +69,15 @@ func (n *Node[T]) SetNext(next *Node[T]) error {
 
 	return nil
 }
+
+// Release releases the resources held by the node.
+func (n *Node[T]) Release() {
+	if n == nil {
+		return
+	}
+
+	n.value = *new(T)
+
+	n.next.Release()
+	n.next = nil
+}

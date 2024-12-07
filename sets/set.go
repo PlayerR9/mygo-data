@@ -2,7 +2,6 @@ package sets
 
 import (
 	"fmt"
-	"iter"
 )
 
 // Set is a set of elements.
@@ -43,15 +42,14 @@ type Set[E any] interface {
 	//   - uint: The number of elements in the set.
 	Size() uint
 
-	// Elem returns an iterator function that yields all the elements in the set.
-	//
-	// The iterator function takes a yield function as an argument and calls it for
-	// each element in the set. If the yield function returns false, the iteration
-	// stops early.
+	// Slice returns the elements of the set as a slice.
 	//
 	// Returns:
-	//   - iter.Seq[E]: An iterator function for the elements in the set.
-	Elem() iter.Seq[E]
+	//   - []E: The elements of the set as a slice.
+	Slice() []E
+
+	// Reset resets the set, allowing it to be used again.
+	Reset()
 
 	fmt.Stringer
 }

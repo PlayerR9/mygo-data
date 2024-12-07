@@ -58,6 +58,9 @@ type Queue[T any] interface {
 	// Returns:
 	//   - uint: The number of values in the queue.
 	Size() uint
+
+	// Reset empties the queue for reuse.
+	Reset()
 }
 
 // Enqueue enqueues multiple values to the given queue.
