@@ -1,4 +1,4 @@
-package queue
+package queues
 
 import "github.com/PlayerR9/mygo-data/common"
 

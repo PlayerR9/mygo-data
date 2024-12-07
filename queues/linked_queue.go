@@ -1,10 +1,10 @@
-package queue
+package queues
 
 import (
 	"sync"
 
 	"github.com/PlayerR9/mygo-data/common"
-	"github.com/PlayerR9/mygo-data/queue/internal"
+	"github.com/PlayerR9/mygo-data/queues/internal"
 )
 
 // LinkedQueue is a queue implemented using a linked list. This is

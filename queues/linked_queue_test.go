@@ -1,4 +1,4 @@
-package queue
+package queues
 
 import (
 	"slices"
@@ -6,8 +6,8 @@ import (
 )
 
 // TestLinkedQueue tests the LinkedQueue.
-func TestArrayQueue(t *testing.T) {
-	queue := new(ArrayQueue[uint])
+func TestLinkedQueue(t *testing.T) {
+	queue := new(LinkedQueue[uint])
 
 	const (
 		MAX uint = 1000
