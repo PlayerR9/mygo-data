@@ -19,7 +19,7 @@ type RefusableStack[T any] struct {
 	mu sync.RWMutex
 }
 
-// Push implements Stack.
+// Push implements BasicStack.
 func (r *RefusableStack[T]) Push(elem T) error {
 	if r == nil {
 		return common.ErrNilReceiver
@@ -32,7 +32,7 @@ func (r *RefusableStack[T]) Push(elem T) error {
 	return err
 }
 
-// Pop implements Stack.
+// Pop implements BasicStack.
 func (r *RefusableStack[T]) Pop() (T, error) {
 	if r == nil {
 		return *new(T), common.ErrNilReceiver
@@ -51,20 +51,7 @@ func (r *RefusableStack[T]) Pop() (T, error) {
 	return top, nil
 }
 
-// IsEmpty implements Stack.
-func (r *RefusableStack[T]) IsEmpty() bool {
-	if r == nil {
-		return true
-	}
-
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
-	ok := r.stack.IsEmpty()
-	return ok
-}
-
-// Peek implements Stack.
+// Peek implements BasicStack.
 func (r *RefusableStack[T]) Peek() (T, error) {
 	if r == nil {
 		return *new(T), common.ErrNilReceiver
@@ -81,7 +68,20 @@ func (r *RefusableStack[T]) Peek() (T, error) {
 	return top, nil
 }
 
-// Slice implements Stack.
+// IsEmpty implements common.Collection.
+func (r *RefusableStack[T]) IsEmpty() bool {
+	if r == nil {
+		return true
+	}
+
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	ok := r.stack.IsEmpty()
+	return ok
+}
+
+// Slice implements common.Collection.
 func (r *RefusableStack[T]) Slice() []T {
 	if r == nil {
 		return nil
@@ -94,7 +94,7 @@ func (r *RefusableStack[T]) Slice() []T {
 	return slice
 }
 
-// Reset implements Stack.
+// Reset implements common.Collection.
 func (r *RefusableStack[T]) Reset() error {
 	if r == nil {
 		return common.ErrNilReceiver
@@ -114,7 +114,7 @@ func (r *RefusableStack[T]) Reset() error {
 	return nil
 }
 
-// Size implements Stack.
+// Size implements common.Collection.
 func (r *RefusableStack[T]) Size() uint {
 	if r == nil {
 		return 0

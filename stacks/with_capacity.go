@@ -21,7 +21,7 @@ type CapacityStack[T any] struct {
 	mu sync.RWMutex
 }
 
-// Push implements Stack.
+// Push implements BasicStack.
 func (c *CapacityStack[T]) Push(elem T) error {
 	if c == nil {
 		return common.ErrNilReceiver
@@ -44,7 +44,7 @@ func (c *CapacityStack[T]) Push(elem T) error {
 	return nil
 }
 
-// Pop implements Stack.
+// Pop implements BasicStack.
 func (c *CapacityStack[T]) Pop() (T, error) {
 	if c == nil {
 		return *new(T), common.ErrNilReceiver
@@ -67,19 +67,7 @@ func (c *CapacityStack[T]) Pop() (T, error) {
 	return elem, nil
 }
 
-// IsEmpty implements Stack.
-func (c *CapacityStack[T]) IsEmpty() bool {
-	if c == nil {
-		return true
-	}
-
-	c.mu.RLock()
-	defer c.mu.RUnlock()
-
-	return c.size == 0
-}
-
-// Peek implements Stack.
+// Peek implements BasicStack.
 func (c *CapacityStack[T]) Peek() (T, error) {
 	if c == nil {
 		return *new(T), common.ErrNilReceiver
@@ -96,7 +84,19 @@ func (c *CapacityStack[T]) Peek() (T, error) {
 	return top, err
 }
 
-// Slice implements Stack.
+// IsEmpty implements common.Collection.
+func (c *CapacityStack[T]) IsEmpty() bool {
+	if c == nil {
+		return true
+	}
+
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
+	return c.size == 0
+}
+
+// Slice implements common.Collection.
 func (c *CapacityStack[T]) Slice() []T {
 	if c == nil {
 		return nil
@@ -109,7 +109,7 @@ func (c *CapacityStack[T]) Slice() []T {
 	return slice
 }
 
-// Reset implements Stack.
+// Reset implements common.Collection.
 func (c *CapacityStack[T]) Reset() error {
 	if c == nil {
 		return common.ErrNilReceiver
@@ -128,7 +128,7 @@ func (c *CapacityStack[T]) Reset() error {
 	return nil
 }
 
-// Size implements Stack.
+// Size implements common.Collection.
 func (c *CapacityStack[T]) Size() uint {
 	if c == nil {
 		return 0

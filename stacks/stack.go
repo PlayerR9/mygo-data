@@ -2,8 +2,8 @@ package stacks
 
 import "github.com/PlayerR9/mygo-data/common"
 
-// Stack is a generic stack interface.
-type Stack[T any] interface {
+// BasicStack is a generic stack interface.
+type BasicStack[E any] interface {
 	// Push pushes an element onto the stack.
 	//
 	// Parameters:
@@ -16,19 +16,19 @@ type Stack[T any] interface {
 	//   - common.ErrNilReceiver: If the receiver is nil.
 	//   - ErrFullStack: If the stack is full.
 	//   - any other error: Implementation-specific.
-	Push(elem T) error
+	Push(elem E) error
 
 	// Pop removes and returns the top element from the stack.
 	//
 	// Returns:
-	//   - T: The top element from the stack.
+	//   - E: The top element from the stack.
 	//   - error: An error if the stack operation fails.
 	//
 	// Errors:
 	//   - common.ErrNilReceiver: If the receiver is nil.
 	//   - ErrEmptyStack: If the stack is empty.
 	//   - any other error: Implementation-specific.
-	Pop() (T, error)
+	Pop() (E, error)
 
 	// Peek returns the top element from the stack without removing it.
 	//
@@ -40,8 +40,12 @@ type Stack[T any] interface {
 	//   - common.ErrNilReceiver: If the receiver is nil.
 	//   - ErrEmptyStack: If the stack is empty.
 	//   - any other error: Implementation-specific.
-	Peek() (T, error)
+	Peek() (E, error)
+}
 
+// Stack is a generic stack interface.
+type Stack[T any] interface {
+	BasicStack[T]
 	common.Collection[T]
 }
 
@@ -59,7 +63,7 @@ type Stack[T any] interface {
 //   - common.ErrBadParam: If the stack is nil.
 //   - ErrFullStack: If the stack is full.
 //   - any other error: Implementation-specific.
-func Push[T any](stack Stack[T], elems ...T) (uint, error) {
+func Push[T any](stack BasicStack[T], elems ...T) (uint, error) {
 	if stack == nil {
 		return 0, common.NewErrNilParam("stack")
 	}

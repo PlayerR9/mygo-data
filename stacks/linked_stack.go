@@ -19,7 +19,7 @@ type LinkedStack[T any] struct {
 	mu sync.RWMutex
 }
 
-// Push implements Stack.
+// Push implements BasicStack.
 func (l *LinkedStack[T]) Push(elem T) error {
 	if l == nil {
 		return common.ErrNilReceiver
@@ -36,7 +36,7 @@ func (l *LinkedStack[T]) Push(elem T) error {
 	return nil
 }
 
-// Pop implements Stack.
+// Pop implements BasicStack.
 func (l *LinkedStack[T]) Pop() (T, error) {
 	if l == nil {
 		return *new(T), common.ErrNilReceiver
@@ -59,19 +59,7 @@ func (l *LinkedStack[T]) Pop() (T, error) {
 	return v, nil
 }
 
-// IsEmpty implements Stack.
-func (l *LinkedStack[T]) IsEmpty() bool {
-	if l == nil {
-		return true
-	}
-
-	l.mu.RLock()
-	defer l.mu.RUnlock()
-
-	return l.head == nil
-}
-
-// Peek implements Stack.
+// Peek implements BasicStack.
 func (l *LinkedStack[T]) Peek() (T, error) {
 	if l == nil {
 		return *new(T), common.ErrNilReceiver
@@ -89,7 +77,19 @@ func (l *LinkedStack[T]) Peek() (T, error) {
 	return v, nil
 }
 
-// Slice implements Stack.
+// IsEmpty implements common.Collection.
+func (l *LinkedStack[T]) IsEmpty() bool {
+	if l == nil {
+		return true
+	}
+
+	l.mu.RLock()
+	defer l.mu.RUnlock()
+
+	return l.head == nil
+}
+
+// Slice implements common.Collection.
 func (l *LinkedStack[T]) Slice() []T {
 	if l == nil {
 		return nil
@@ -109,7 +109,7 @@ func (l *LinkedStack[T]) Slice() []T {
 	return elems
 }
 
-// Reset implements Stack.
+// Reset implements common.Collection.
 func (l *LinkedStack[T]) Reset() error {
 	if l == nil {
 		return common.ErrNilReceiver
@@ -128,7 +128,7 @@ func (l *LinkedStack[T]) Reset() error {
 	return nil
 }
 
-// Size implements Stack.
+// Size implements common.Collection.
 func (l *LinkedStack[T]) Size() uint {
 	if l == nil {
 		return 0

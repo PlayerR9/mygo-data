@@ -18,7 +18,7 @@ type ArrayStack[T any] struct {
 	mu sync.RWMutex
 }
 
-// Push implements Stack.
+// Push implements BasicStack.
 func (a *ArrayStack[T]) Push(elem T) error {
 	if a == nil {
 		return common.ErrNilReceiver
@@ -32,7 +32,7 @@ func (a *ArrayStack[T]) Push(elem T) error {
 	return nil
 }
 
-// Pop implements Stack.
+// Pop implements BasicStack.
 func (a *ArrayStack[T]) Pop() (T, error) {
 	if a == nil {
 		return *new(T), common.ErrNilReceiver
@@ -51,7 +51,7 @@ func (a *ArrayStack[T]) Pop() (T, error) {
 	return top, nil
 }
 
-// Peek implements Stack.
+// Peek implements BasicStack.
 func (a *ArrayStack[T]) Peek() (T, error) {
 	if a == nil {
 		return *new(T), common.ErrNilReceiver
@@ -67,7 +67,7 @@ func (a *ArrayStack[T]) Peek() (T, error) {
 	return a.elems[len(a.elems)-1], nil
 }
 
-// IsEmpty implements Stack.
+// IsEmpty implements common.Collection.
 func (a *ArrayStack[T]) IsEmpty() bool {
 	if a == nil {
 		return true
@@ -79,7 +79,7 @@ func (a *ArrayStack[T]) IsEmpty() bool {
 	return len(a.elems) == 0
 }
 
-// Slice implements Stack.
+// Slice implements common.Collection.
 func (a *ArrayStack[T]) Slice() []T {
 	if a == nil {
 		return nil
@@ -94,7 +94,7 @@ func (a *ArrayStack[T]) Slice() []T {
 	return elems
 }
 
-// Reset implements Stack.
+// Reset implements common.Collection.
 func (a *ArrayStack[T]) Reset() error {
 	if a == nil {
 		return common.ErrNilReceiver
@@ -113,7 +113,7 @@ func (a *ArrayStack[T]) Reset() error {
 	return nil
 }
 
-// Size implements Stack.
+// Size implements common.Collection.
 func (a *ArrayStack[T]) Size() uint {
 	if a == nil {
 		return 0
