@@ -57,14 +57,13 @@ type Stack[T any] interface {
 	// slice is the bottom element of the stack.
 	Slice() []T
 
-	// Reset empties the stack for reuse.
-	Reset()
-
 	// Size returns the number of elements in the stack.
 	//
 	// Returns:
 	//   - uint: The number of elements in the stack.
 	Size() uint
+
+	common.Resetter
 }
 
 // Push pushes multiple elements onto the stack.

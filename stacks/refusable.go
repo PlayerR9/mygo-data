@@ -98,18 +98,23 @@ func (r *RefusableStack[T]) Slice() []T {
 }
 
 // Reset implements Stack.
-func (r *RefusableStack[T]) Reset() {
+func (r *RefusableStack[T]) Reset() error {
 	if r == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	r.stack.Reset()
+	err := r.stack.Reset()
+	if err != nil {
+		return err
+	}
 
 	clear(r.popped)
 	r.popped = nil
+
+	return nil
 }
 
 // Size implements Stack.

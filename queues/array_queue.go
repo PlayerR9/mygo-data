@@ -108,14 +108,20 @@ func (a *ArrayQueue[T]) Size() uint {
 }
 
 // Reset implements Queue.
-func (a *ArrayQueue[T]) Reset() {
+func (a *ArrayQueue[T]) Reset() error {
 	if a == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
+	if len(a.queue) == 0 {
+		return nil
+	}
+
 	clear(a.queue)
 	a.queue = nil
+
+	return nil
 }

@@ -95,16 +95,22 @@ func (a *ArrayStack[T]) Slice() []T {
 }
 
 // Reset implements Stack.
-func (a *ArrayStack[T]) Reset() {
+func (a *ArrayStack[T]) Reset() error {
 	if a == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
+	if len(a.elems) == 0 {
+		return nil
+	}
+
 	clear(a.elems)
 	a.elems = nil
+
+	return nil
 }
 
 // Size implements Stack.

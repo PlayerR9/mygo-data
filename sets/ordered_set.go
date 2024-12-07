@@ -6,6 +6,8 @@ import (
 	"slices"
 	"strings"
 	"sync"
+
+	"github.com/PlayerR9/mygo-data/common"
 )
 
 // OrderedSet is a set of elements that are ordered.
@@ -78,17 +80,23 @@ func (s *OrderedSet[E]) Insert(e E) error {
 	return nil
 }
 
-// Reset resets the set, allowing it to be used again.
-func (s *OrderedSet[E]) Reset() {
+// Reset implements Set.
+func (s *OrderedSet[E]) Reset() error {
 	if s == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	if len(s.elems) == 0 {
+		return nil
+	}
+
 	clear(s.elems)
 	s.elems = nil
+
+	return nil
 }
 
 // Slice implements Set.

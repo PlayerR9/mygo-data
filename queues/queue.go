@@ -59,8 +59,7 @@ type Queue[T any] interface {
 	//   - uint: The number of values in the queue.
 	Size() uint
 
-	// Reset empties the queue for reuse.
-	Reset()
+	common.Resetter
 }
 
 // Enqueue enqueues multiple values to the given queue.

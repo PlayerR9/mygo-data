@@ -2,6 +2,8 @@ package sets
 
 import (
 	"fmt"
+
+	"github.com/PlayerR9/mygo-data/common"
 )
 
 // Set is a set of elements.
@@ -48,8 +50,7 @@ type Set[E any] interface {
 	//   - []E: The elements of the set as a slice.
 	Slice() []E
 
-	// Reset resets the set, allowing it to be used again.
-	Reset()
+	common.Resetter
 
 	fmt.Stringer
 }

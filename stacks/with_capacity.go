@@ -103,16 +103,22 @@ func (c *CapacityStack[T]) Slice() []T {
 }
 
 // Reset implements Stack.
-func (c *CapacityStack[T]) Reset() {
+func (c *CapacityStack[T]) Reset() error {
 	if c == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	c.stack.Reset()
+	err := c.stack.Reset()
+	if err != nil {
+		return err
+	}
+
 	c.size = 0
+
+	return nil
 }
 
 // Size implements Stack.

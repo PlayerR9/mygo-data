@@ -158,16 +158,16 @@ func (l *LinkedQueue[T]) Size() uint {
 }
 
 // Reset implements Queue.
-func (l *LinkedQueue[T]) Reset() {
+func (l *LinkedQueue[T]) Reset() error {
 	if l == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	l.head_mu.Lock()
 	defer l.head_mu.Unlock()
 
 	if l.head == nil {
-		return
+		return nil
 	}
 
 	l.tail_mu.Lock()
@@ -177,4 +177,6 @@ func (l *LinkedQueue[T]) Reset() {
 	l.head = nil
 
 	l.tail = nil
+
+	return nil
 }

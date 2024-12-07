@@ -110,20 +110,22 @@ func (l *LinkedStack[T]) Slice() []T {
 }
 
 // Reset implements Stack.
-func (l *LinkedStack[T]) Reset() {
+func (l *LinkedStack[T]) Reset() error {
 	if l == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
 	if l.head == nil {
-		return
+		return nil
 	}
 
 	l.head.Release()
 	l.head = nil
+
+	return nil
 }
 
 // Size implements Stack.

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+
+	"github.com/PlayerR9/mygo-data/common"
 )
 
 // SeenSet is a set of seen elements.
@@ -79,17 +81,23 @@ func (s *SeenSet[E]) Insert(e E) error {
 	return nil
 }
 
-// Reset resets the set, allowing it to be used again.
-func (s *SeenSet[E]) Reset() {
+// Reset implements Set.
+func (s *SeenSet[E]) Reset() error {
 	if s == nil {
-		return
+		return common.ErrNilReceiver
 	}
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	if len(s.seen) == 0 {
+		return nil
+	}
+
 	clear(s.seen)
 	s.seen = nil
+
+	return nil
 }
 
 // Slice implements Set.
