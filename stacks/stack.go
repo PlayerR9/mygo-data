@@ -1,6 +1,9 @@
 package stacks
 
-import "github.com/PlayerR9/mygo-data/common"
+import (
+	"github.com/PlayerR9/mygo-data/collections"
+	"github.com/PlayerR9/mygo-data/common"
+)
 
 // BasicStack is a generic stack interface.
 type BasicStack[E any] interface {
@@ -46,7 +49,7 @@ type BasicStack[E any] interface {
 // Stack is a generic stack interface.
 type Stack[T any] interface {
 	BasicStack[T]
-	common.Collection[T]
+	collections.Collection[T]
 }
 
 // Push pushes multiple elements onto the stack.

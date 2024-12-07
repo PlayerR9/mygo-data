@@ -1,6 +1,10 @@
-package common
+package collections
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/PlayerR9/mygo-data/common"
+)
 
 // CapacityCollection is a collection that has a fixed capacity.
 type CapacityCollection[T any] struct {
@@ -44,7 +48,7 @@ func (c *CapacityCollection[T]) Size() uint {
 // Reset implements Collection.
 func (c *CapacityCollection[T]) Reset() error {
 	if c == nil {
-		return ErrNilReceiver
+		return common.ErrNilReceiver
 	}
 
 	c.mu.Lock()
@@ -76,7 +80,7 @@ func (c *CapacityCollection[T]) Slice() []T {
 // Add implements Collection.
 func (c *CapacityCollection[T]) Add(elem T) error {
 	if c == nil {
-		return ErrNilReceiver
+		return common.ErrNilReceiver
 	}
 
 	c.mu.Lock()

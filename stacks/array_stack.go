@@ -42,7 +42,7 @@ func (a *ArrayStack[T]) Pop() (T, error) {
 	defer a.mu.Unlock()
 
 	if len(a.elems) == 0 {
-		return *new(T), common.ErrEmptyCollection
+		return *new(T), ErrEmptyStack
 	}
 
 	top := a.elems[len(a.elems)-1]
@@ -61,7 +61,7 @@ func (a *ArrayStack[T]) Peek() (T, error) {
 	defer a.mu.RUnlock()
 
 	if len(a.elems) == 0 {
-		return *new(T), common.ErrEmptyCollection
+		return *new(T), ErrEmptyStack
 	}
 
 	return a.elems[len(a.elems)-1], nil

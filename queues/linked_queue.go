@@ -55,7 +55,7 @@ func (l *LinkedQueue[T]) Dequeue() (T, error) {
 	if l == nil {
 		return *new(T), common.ErrNilReceiver
 	} else if l.head == nil {
-		return *new(T), common.ErrEmptyCollection
+		return *new(T), ErrEmptyQueue
 	}
 
 	l.head_mu.Lock()
@@ -87,7 +87,7 @@ func (l *LinkedQueue[T]) Front() (T, error) {
 	defer l.head_mu.RUnlock()
 
 	if l.head == nil {
-		return *new(T), common.ErrEmptyCollection
+		return *new(T), ErrEmptyQueue
 	}
 
 	return l.head.GetValue()

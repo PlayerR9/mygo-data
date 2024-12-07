@@ -1,6 +1,9 @@
 package queues
 
-import "github.com/PlayerR9/mygo-data/common"
+import (
+	"github.com/PlayerR9/mygo-data/collections"
+	"github.com/PlayerR9/mygo-data/common"
+)
 
 type BasicQueue[E any] interface {
 	// Enqueue adds a value to the queue.
@@ -46,7 +49,7 @@ type BasicQueue[E any] interface {
 type Queue[T any] interface {
 	BasicQueue[T]
 
-	common.Collection[T]
+	collections.Collection[T]
 }
 
 // Enqueue enqueues multiple values to the given queue.

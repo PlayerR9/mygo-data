@@ -3,6 +3,7 @@ package sets
 import (
 	"fmt"
 
+	"github.com/PlayerR9/mygo-data/collections"
 	"github.com/PlayerR9/mygo-data/common"
 )
 
@@ -70,7 +71,7 @@ func Insert[E any](s BasicSet[E], elems ...E) (uint, error) {
 type Set[E any] interface {
 	BasicSet[E]
 
-	common.Collection[E]
+	collections.Collection[E]
 
 	fmt.Stringer
 }

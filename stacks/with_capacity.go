@@ -31,7 +31,7 @@ func (c *CapacityStack[T]) Push(elem T) error {
 	defer c.mu.Unlock()
 
 	if c.size >= c.capacity {
-		return common.ErrFullCollection
+		return ErrFullStack
 	}
 
 	err := c.stack.Push(elem)
@@ -54,7 +54,7 @@ func (c *CapacityStack[T]) Pop() (T, error) {
 	defer c.mu.Unlock()
 
 	if c.size == 0 {
-		return *new(T), common.ErrEmptyCollection
+		return *new(T), ErrEmptyStack
 	}
 
 	elem, err := c.stack.Pop()
@@ -77,7 +77,7 @@ func (c *CapacityStack[T]) Peek() (T, error) {
 	defer c.mu.RUnlock()
 
 	if c.size == 0 {
-		return *new(T), common.ErrEmptyCollection
+		return *new(T), ErrEmptyStack
 	}
 
 	top, err := c.stack.Peek()
@@ -150,7 +150,7 @@ func (c *CapacityStack[T]) Add(elem T) error {
 	defer c.mu.Unlock()
 
 	if c.size >= c.capacity {
-		return common.ErrFullCollection
+		return ErrFullStack
 	}
 
 	err := c.stack.Add(elem)

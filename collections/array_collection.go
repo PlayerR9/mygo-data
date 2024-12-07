@@ -1,7 +1,9 @@
-package common
+package collections
 
 import (
 	"sync"
+
+	"github.com/PlayerR9/mygo-data/common"
 )
 
 // ArrayCollection is an array collection.
@@ -43,7 +45,7 @@ func (a *ArrayCollection[E]) Size() uint {
 // Reset implements Collection.
 func (a *ArrayCollection[E]) Reset() error {
 	if a == nil {
-		return ErrNilReceiver
+		return common.ErrNilReceiver
 	}
 
 	a.mu.Lock()
@@ -77,7 +79,7 @@ func (a *ArrayCollection[E]) Slice() []E {
 // Add implements Collection.
 func (a *ArrayCollection[E]) Add(elem E) error {
 	if a == nil {
-		return ErrNilReceiver
+		return common.ErrNilReceiver
 	}
 
 	a.mu.Lock()

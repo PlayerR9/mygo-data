@@ -1,4 +1,6 @@
-package common
+package collections
+
+import "github.com/PlayerR9/mygo-data/common"
 
 // Collection is an interface for a collection.
 type Collection[E any] interface {
@@ -69,7 +71,7 @@ type Collection[E any] interface {
 //   - any other error: Implementation-specific.
 func Add[E any](c Collection[E], elems ...E) (uint, error) {
 	if c == nil {
-		return 0, NewErrNilParam("c")
+		return 0, common.NewErrNilParam("c")
 	}
 
 	lenElems := len(elems)
