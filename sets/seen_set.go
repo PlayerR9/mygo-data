@@ -1,8 +1,6 @@
 package sets
 
 import (
-	"fmt"
-	"strings"
 	"sync"
 
 	"github.com/PlayerR9/mygo-data/common"
@@ -131,29 +129,4 @@ func (s *SeenSet[E]) Add(elem E) error {
 	s.seen[elem] = struct{}{}
 
 	return nil
-}
-
-// String implements fmt.Stringer.
-func (s *SeenSet[E]) String() string {
-	if s == nil {
-		return ""
-	}
-
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	elems := make([]string, 0, len(s.seen))
-
-	for e := range s.seen {
-		str := fmt.Sprint(e)
-		elems = append(elems, str)
-	}
-
-	var builder strings.Builder
-
-	_, _ = builder.WriteString("SeenSet[E][")
-	_, _ = builder.WriteString(strings.Join(elems, ", "))
-	_, _ = builder.WriteRune(']')
-
-	return builder.String()
 }

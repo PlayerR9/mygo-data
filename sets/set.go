@@ -1,8 +1,6 @@
 package sets
 
 import (
-	"fmt"
-
 	"github.com/PlayerR9/mygo-data/collections"
 	"github.com/PlayerR9/mygo-data/common"
 )
@@ -72,6 +70,4 @@ type Set[E any] interface {
 	BasicSet[E]
 
 	collections.Collection[E]
-
-	fmt.Stringer
 }

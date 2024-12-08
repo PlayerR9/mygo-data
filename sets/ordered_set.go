@@ -2,9 +2,7 @@ package sets
 
 import (
 	"cmp"
-	"fmt"
 	"slices"
-	"strings"
 	"sync"
 
 	"github.com/PlayerR9/mygo-data/common"
@@ -128,29 +126,4 @@ func (s *OrderedSet[E]) Add(elem E) error {
 	s.elems = slices.Insert(s.elems, pos, elem)
 
 	return nil
-}
-
-// String implements fmt.Stringer.
-func (s *OrderedSet[E]) String() string {
-	if s == nil {
-		return ""
-	}
-
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	elems := make([]string, 0, len(s.elems))
-
-	for _, e := range s.elems {
-		str := fmt.Sprint(e)
-		elems = append(elems, str)
-	}
-
-	var builder strings.Builder
-
-	_, _ = builder.WriteString("OrderedSet[E][")
-	_, _ = builder.WriteString(strings.Join(elems, ", "))
-	_, _ = builder.WriteRune(']')
-
-	return builder.String()
 }
