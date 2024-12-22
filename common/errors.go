@@ -3,8 +3,8 @@ package common
 import "errors"
 
 var (
-	// ErrNilReceiver occurs when a method is called on a receiver that is nil. This
-	// error can be checked with the == operator.
+	// ErrNilReceiver occurs when a method is called on a receiver that was not
+	// expected to be nil. This error can be checked with the == operator.
 	//
 	// Format:
 	// 	"receiver must not be nil"
@@ -17,71 +17,73 @@ func init() {
 
 // ErrBadParam occurs when a parameter is not valid.
 type ErrBadParam struct {
-	// Name is the name of the parameter.
-	Name string
+	// ParamName is the name of the parameter that is invalid.
+	ParamName string
 
-	// Msg is the error message.
-	Msg string
+	// Reason is the reason the parameter is invalid.
+	Reason string
 }
 
 // Error implements error.
 func (e ErrBadParam) Error() string {
-	var msg string
+	var reason string
 
-	if e.Msg == "" {
-		msg = "is not valid"
+	if e.Reason == "" {
+		reason = "is not valid"
 	} else {
-		msg = e.Msg
+		reason = e.Reason
 	}
 
-	if e.Name == "" {
-		return "parameter " + msg
+	if e.ParamName == "" {
+		return "parameter " + reason
 	} else {
-		return "parameter (" + e.Name + ") " + msg
+		return "parameter (" + e.ParamName + ") " + reason
 	}
 }
 
-// NewErrBadParam creates and returns a new ErrBadParam error with the specified
-// parameter name and error message.
+// NewErrBadParam returns an error with the given parameter name and reason.
 //
 // Parameters:
-//   - name: The name of the parameter.
-//   - msg: The error message.
+//   - param_name: The name of the parameter that is invalid.
+//   - reason: The reason the parameter is invalid.
 //
 // Returns:
-//   - error: A pointer to the newly created ErrBadParam. Never returns nil.
+//   - error: An instance of ErrBadParam. Never returns nil.
 //
 // Format:
 //
-//	"parameter (<name>) <msg>"
+//	"parameter (<param_name>) <reason>"
 //
 // Where:
-//   - <name> is the name of the parameter. If empty, it is omitted.
-//   - <msg> is the error message. If empty, defaults to "is not valid".
-func NewErrBadParam(name, msg string) error {
-	return &ErrBadParam{
-		Name: name,
-		Msg:  msg,
+//   - (<param_name>) is the name of the parameter that is invalid. If empty, it is ignored.
+//   - <reason> is the reason the parameter is invalid. If empty, "is not valid" is used.
+func NewErrBadParam(param_name, reason string) error {
+	e := &ErrBadParam{
+		ParamName: param_name,
+		Reason:    reason,
 	}
+
+	return e
 }
 
-// NewErrNilParam creates and returns a new ErrBadParam error with the specified
-// parameter name and error message "must not be nil".
+// NewErrNilParam returns an error with the given parameter name and reason "must not be nil".
 //
 // Parameters:
-//   - name: The name of the parameter.
+//   - param_name: The name of the parameter that is invalid.
 //
 // Returns:
-//   - error: A pointer to the newly created ErrBadParam. Never returns nil.
+//   - error: An instance of ErrBadParam. Never returns nil.
 //
 // Format:
 //
-//	"parameter (<name>) must not be nil"
+//	"parameter (<param_name>) must not be nil"
 //
-// Where, <name> is the name of the parameter. If empty, it is omitted.
-func NewErrNilParam(name string) error {
-	return &ErrBadParam{
-		Name: name,
-		Msg:  "must not be nil",
+// Where:
+//   - (<param_name>) is the name of the parameter that is invalid. If empty, it is ignored.
+func NewErrNilParam(param_name string) error {
+	e := &ErrBadParam{
+		ParamName: param_name,
+		Reason:    "must not be nil",
 	}
+	return e
 }
