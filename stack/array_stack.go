@@ -1,8 +1,6 @@
 package stack
 
 import (
-	"slices"
-
 	"github.com/PlayerR9/mygo-data/errors"
 )
 
@@ -51,15 +49,20 @@ func (as ArrayStack[E]) Slice() []E {
 		return nil
 	}
 
-	slice := make([]E, len(as.elems))
+	slice := make([]E, 0, len(as.elems))
 	copy(slice, as.elems)
 
-	slices.Reverse(slice)
+	j := len(slice) - 1
+
+	for i := 0; i < j; i++ {
+		slice[i], slice[j] = slice[j], slice[i]
+		j--
+	}
 
 	return slice
 }
 
-// Reset implements common.Resetter.
+// Reset implements Collection.
 func (as *ArrayStack[E]) Reset() error {
 	if as == nil {
 		return errors.ErrNilReceiver

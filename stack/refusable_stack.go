@@ -1,8 +1,6 @@
 package stack
 
 import (
-	"slices"
-
 	"github.com/PlayerR9/mygo-data/errors"
 )
 
@@ -81,7 +79,8 @@ func (s *RefusableStack[E]) Reset() error {
 //   - common.ErrBadParam: If the stack parameter is nil.
 func RefusableOf[E any](stack Stack[E]) (*RefusableStack[E], error) {
 	if stack == nil {
-		return nil, errors.NewErrNilParam("stack")
+		err := errors.NewErrNilParam("stack")
+		return nil, err
 	}
 
 	s := &RefusableStack[E]{
@@ -152,7 +151,12 @@ func (s RefusableStack[E]) Popped() []E {
 	slice := make([]E, len(s.popped))
 	copy(slice, s.popped)
 
-	slices.Reverse(slice)
+	j := len(slice) - 1
+
+	for i := 0; i < j; i++ {
+		slice[i], slice[j] = slice[j], slice[i]
+		j--
+	}
 
 	return slice
 }
