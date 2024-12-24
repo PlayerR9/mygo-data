@@ -1,7 +1,5 @@
 package common
 
-import "errors"
-
 var (
 	// ErrNilReceiver occurs when a method is called on a receiver that was not
 	// expected to be nil. This error can be checked with the == operator.
@@ -12,7 +10,7 @@ var (
 )
 
 func init() {
-	ErrNilReceiver = errors.New("receiver must not be nil")
+	ErrNilReceiver = New("receiver must not be nil")
 }
 
 // ErrBadParam occurs when a parameter is not valid.

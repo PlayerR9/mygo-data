@@ -1,7 +1,5 @@
 package stack
 
-import "github.com/PlayerR9/mygo-data/common"
-
 // CoreStack is a generic stack interface.
 type CoreStack[E any] interface {
 	// Push pushes an element onto the stack.
@@ -38,5 +36,4 @@ type CoreStack[E any] interface {
 type Stack[E any] interface {
 	CoreStack[E]
 	Collection[E]
-	common.Resetter
 }

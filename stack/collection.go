@@ -7,4 +7,14 @@ type Collection[E any] interface {
 	// Returns:
 	//   - []E: A slice of the elements in the collection.
 	Slice() []E
+
+	// Reset resets the object.
+	//
+	// Returns:
+	//   - error: An error if the object could not be reset.
+	//
+	// Errors:
+	//   - common.ErrNilReceiver: If the receiver is nil.
+	//   - any other error: Implementation-specific.
+	Reset() error
 }
