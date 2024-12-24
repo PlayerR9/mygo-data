@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/PlayerR9/mygo-data/common"
+	"github.com/PlayerR9/mygo-data/errors"
 )
 
 // BaseNode is a node in the tree.
@@ -68,7 +68,7 @@ func NewBaseNode(type_, data string) *BaseNode {
 //   - common.ErrNilReceiver: If the receiver is nil.
 func (n *BaseNode) PrependChild(child *BaseNode) error {
 	if n == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	if child == nil {
@@ -105,7 +105,7 @@ func (n *BaseNode) PrependChild(child *BaseNode) error {
 //   - common.ErrNilReceiver: If the receiver is nil.
 func (n *BaseNode) AppendChild(child *BaseNode) error {
 	if n == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	if child == nil {

@@ -3,7 +3,7 @@ package stack
 import (
 	"slices"
 
-	"github.com/PlayerR9/mygo-data/common"
+	"github.com/PlayerR9/mygo-data/errors"
 )
 
 // RefusableStack is a stack that can be reset.
@@ -18,7 +18,7 @@ type RefusableStack[E any] struct {
 // Push implements CoreStack.
 func (s *RefusableStack[E]) Push(e E) error {
 	if s == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	err := s.stack.Push(e)
@@ -28,7 +28,7 @@ func (s *RefusableStack[E]) Push(e E) error {
 // Pop implements CoreStack.
 func (s *RefusableStack[E]) Pop() (E, error) {
 	if s == nil {
-		return *new(E), common.ErrNilReceiver
+		return *new(E), errors.ErrNilReceiver
 	}
 
 	top, err := s.stack.Pop()
@@ -50,7 +50,7 @@ func (s RefusableStack[E]) Slice() []E {
 // Reset implements common.Resetter.
 func (s *RefusableStack[E]) Reset() error {
 	if s == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	err := s.stack.Reset()
@@ -81,7 +81,7 @@ func (s *RefusableStack[E]) Reset() error {
 //   - common.ErrBadParam: If the stack parameter is nil.
 func RefusableOf[E any](stack Stack[E]) (*RefusableStack[E], error) {
 	if stack == nil {
-		return nil, common.NewErrNilParam("stack")
+		return nil, errors.NewErrNilParam("stack")
 	}
 
 	s := &RefusableStack[E]{
@@ -101,7 +101,7 @@ func RefusableOf[E any](stack Stack[E]) (*RefusableStack[E], error) {
 //   - common.ErrNilReceiver: If the receiver is nil.
 func (s *RefusableStack[E]) Accept() error {
 	if s == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	if len(s.popped) == 0 {
@@ -124,7 +124,7 @@ func (s *RefusableStack[E]) Accept() error {
 //   - common.ErrNilReceiver: If the receiver is nil.
 func (s *RefusableStack[E]) Refuse() error {
 	if s == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	for len(s.popped) > 0 {

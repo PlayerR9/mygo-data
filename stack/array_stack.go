@@ -3,7 +3,7 @@ package stack
 import (
 	"slices"
 
-	"github.com/PlayerR9/mygo-data/common"
+	"github.com/PlayerR9/mygo-data/errors"
 )
 
 // ArrayStack is a generic stack implemented using an array.
@@ -15,7 +15,7 @@ type ArrayStack[E any] struct {
 // Push implements CoreStack.
 func (as *ArrayStack[E]) Push(e E) error {
 	if as == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	as.elems = append(as.elems, e)
@@ -26,7 +26,7 @@ func (as *ArrayStack[E]) Push(e E) error {
 // Pop implements CoreStack.
 func (as *ArrayStack[E]) Pop() (E, error) {
 	if as == nil {
-		return *new(E), common.ErrNilReceiver
+		return *new(E), errors.ErrNilReceiver
 	}
 
 	if len(as.elems) == 0 {
@@ -62,7 +62,7 @@ func (as ArrayStack[E]) Slice() []E {
 // Reset implements common.Resetter.
 func (as *ArrayStack[E]) Reset() error {
 	if as == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	if len(as.elems) == 0 {

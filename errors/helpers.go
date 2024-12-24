@@ -1,4 +1,4 @@
-package common
+package errors
 
 const (
 	// DefaultErrorMessage is the default error message.

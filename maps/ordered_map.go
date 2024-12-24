@@ -5,7 +5,7 @@ import (
 	"iter"
 	"slices"
 
-	"github.com/PlayerR9/mygo-data/common"
+	"github.com/PlayerR9/mygo-data/errors"
 )
 
 // OrderedMap is a map that is ordered by the keys.
@@ -32,7 +32,7 @@ type OrderedMap[K cmp.Ordered, V any] struct {
 //   - common.ErrNilReceiver: If the receiver is nil.
 func (om *OrderedMap[K, V]) Set(k K, v V) error {
 	if om == nil {
-		return common.ErrNilReceiver
+		return errors.ErrNilReceiver
 	}
 
 	pos, ok := slices.BinarySearch(om.keys, k)
