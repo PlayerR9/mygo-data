@@ -1,6 +1,6 @@
 package stack
 
-import "github.com/PlayerR9/mygo-data/errors"
+import "errors"
 
 var (
 	// ErrEmptyStack occurs when the stack is empty. This error can be checked

@@ -1,7 +1,7 @@
 package stack
 
 import (
-	"github.com/PlayerR9/mygo-data/errors"
+	common "github.com/PlayerR9/mygo-data/common"
 )
 
 // ArrayStack is a generic stack implemented using an array.
@@ -13,7 +13,7 @@ type ArrayStack[E any] struct {
 // Push implements CoreStack.
 func (as *ArrayStack[E]) Push(e E) error {
 	if as == nil {
-		return errors.ErrNilReceiver
+		return common.ErrNilReceiver
 	}
 
 	as.elems = append(as.elems, e)
@@ -24,7 +24,7 @@ func (as *ArrayStack[E]) Push(e E) error {
 // Pop implements CoreStack.
 func (as *ArrayStack[E]) Pop() (E, error) {
 	if as == nil {
-		return *new(E), errors.ErrNilReceiver
+		return *new(E), common.ErrNilReceiver
 	}
 
 	if len(as.elems) == 0 {
@@ -65,7 +65,7 @@ func (as ArrayStack[E]) Slice() []E {
 // Reset implements Collection.
 func (as *ArrayStack[E]) Reset() error {
 	if as == nil {
-		return errors.ErrNilReceiver
+		return common.ErrNilReceiver
 	}
 
 	if len(as.elems) == 0 {
@@ -74,6 +74,38 @@ func (as *ArrayStack[E]) Reset() error {
 
 	clear(as.elems)
 	as.elems = nil
+
+	return nil
+}
+
+// PushMany pushes all elements in the slice onto the stack in the order they are given in the slice.
+//
+// Parameters:
+//   - elems: The elements to push onto the stack.
+//
+// Returns:
+//   - error: An error if the elements could not be pushed onto the stack.
+//
+// Errors:
+//   - common.ErrNilReceiver: If the stack is nil.
+func (as *ArrayStack[E]) PushMany(elems []E) error {
+	if as == nil {
+		return common.ErrNilReceiver
+	} else if len(elems) == 0 {
+		return nil
+	}
+
+	tmp := make([]E, len(elems)) // Prevent side-effects
+	copy(tmp, elems)
+
+	j := len(tmp) - 1
+
+	for i := 0; i < j; i++ {
+		tmp[i], tmp[j] = tmp[j], tmp[i]
+		j--
+	}
+
+	as.elems = append(as.elems, tmp...)
 
 	return nil
 }

@@ -1,7 +1,7 @@
 package tree
 
 import (
-	"github.com/PlayerR9/mygo-data/errors"
+	common "github.com/PlayerR9/mygo-data/common"
 	"github.com/PlayerR9/mygo-data/tree/internal"
 )
 
@@ -23,7 +23,7 @@ import (
 //     trimmed.
 func PrependChildren(parent *BaseNode, nodes []*BaseNode) error {
 	if parent == nil {
-		err := errors.NewErrBadParam("parent", "is nil")
+		err := common.NewErrBadParam("parent", "is nil")
 		return err
 	}
 
@@ -63,7 +63,7 @@ func PrependChildren(parent *BaseNode, nodes []*BaseNode) error {
 //     trimmed.
 func AppendChildren(parent *BaseNode, nodes []*BaseNode) error {
 	if parent == nil {
-		err := errors.NewErrBadParam("parent", "is nil")
+		err := common.NewErrBadParam("parent", "is nil")
 		return err
 	}
 
