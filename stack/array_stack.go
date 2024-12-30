@@ -4,12 +4,13 @@ import (
 	"sync"
 
 	common "github.com/PlayerR9/mygo-data/common"
+	"github.com/PlayerR9/mygo-data/stack/internal"
 )
 
 // ArrayStack is a generic stack implemented using an array.
 //
-// An empty stack can either be created with the `var as ArrayStack[E]` syntax
-// or with the `as := new(ArrayStack[E])` constructor.
+// An empty stack can be created with the `as := new(ArrayStack[E])`
+// constructor.
 type ArrayStack[E any] struct {
 	// elems is the underlying array.
 	elems []E
@@ -80,12 +81,7 @@ func (as *ArrayStack[E]) Slice() []E {
 	slice := make([]E, 0, len(as.elems))
 	copy(slice, as.elems)
 
-	j := len(slice) - 1
-
-	for i := 0; i < j; i++ {
-		slice[i], slice[j] = slice[j], slice[i]
-		j--
-	}
+	internal.Reverse(slice)
 
 	return slice
 }
@@ -134,12 +130,7 @@ func (as *ArrayStack[E]) PushMany(elems []E) error {
 	tmp := make([]E, len(elems)) // Prevent side-effects
 	copy(tmp, elems)
 
-	j := len(tmp) - 1
-
-	for i := 0; i < j; i++ {
-		tmp[i], tmp[j] = tmp[j], tmp[i]
-		j--
-	}
+	internal.Reverse(tmp)
 
 	as.elems = append(as.elems, tmp...)
 
