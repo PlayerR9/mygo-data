@@ -78,7 +78,7 @@ func (as *ArrayStack[E]) Slice() []E {
 		return nil
 	}
 
-	slice := make([]E, 0, len(as.elems))
+	slice := make([]E, len(as.elems))
 	copy(slice, as.elems)
 
 	internal.Reverse(slice)
